@@ -534,8 +534,8 @@ public:
 	 ++p) {
       Session *s = get_or_add_session(p->second);
       set_state(s, Session::STATE_OPEN);
+      version++;
     }
-    version++;
   }
 
   // helpers
