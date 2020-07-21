@@ -4776,9 +4776,11 @@ int BlueStore::_do_overlay_write(TransContext *txc,
 {
   _do_overlay_trim(txc, o, offset, length);
 
+#if 0
   // let's avoid considering how overlay interacts with cached tail
   // blocks for now.
   o->clear_tail();
+#endif
 
   dout(10) << __func__ << " " << o->oid << " "
 	   << offset << "~" << length << dendl;
@@ -4990,6 +4992,7 @@ void BlueStore::_pad_zeros(
     bl->substr_of(old, 0, *length - back_copy);
     bl->append(tail);
     *length += back_pad;
+#if 0
     if (end >= o->onode.size && g_conf->bluestore_cache_tails) {
       o->tail_bl.clear();
       o->tail_bl.append(tail, 0, back_copy);
@@ -4998,6 +5001,7 @@ void BlueStore::_pad_zeros(
       dout(20) << __func__ << " cached "<< back_copy << " of tail block at "
 	       << o->tail_offset << dendl;
     }
+#endif
   }
   dout(20) << __func__ << " pad " << front_pad << " + " << back_pad
 	   << " on front/back, now " << *offset << "~" << *length << dendl;
@@ -5073,6 +5077,7 @@ void BlueStore::_pad_zeros_tail(
   bl->substr_of(old, 0, *length - back_copy);
   bl->append(tail);
   *length += back_pad;
+#if 0
   if (tail_len == block_size &&
       end >= o->onode.size && g_conf->bluestore_cache_tails) {
     o->tail_bl.clear();
@@ -5082,6 +5087,7 @@ void BlueStore::_pad_zeros_tail(
     dout(20) << __func__ << " cached "<< back_copy << " of tail block at "
 	     << o->tail_offset << dendl;
   }
+#endif
   dout(20) << __func__ << " pad " << back_pad
 	   << " on back, now " << offset << "~" << *length << dendl;
   dout(40) << "after:\n";
@@ -5521,6 +5527,7 @@ int BlueStore::_do_write(
       continue;
     }
 
+#if 0
     // use cached tail block?
     uint64_t tail_start = o->onode.size - o->onode.size % block_size;
     if (offset >= bp->first &&
@@ -5574,6 +5581,7 @@ int BlueStore::_do_write(
       dout(20) << __func__ << " clearing cached tail" << dendl;
       o->clear_tail();
     }
+#endif
 
     if (offset % min_alloc_size == 0 &&
 	length % min_alloc_size == 0) {
@@ -5921,6 +5929,7 @@ int BlueStore::_do_truncate(
   // they may touch.
   o->flush();
 
+#if 0
   // trim down cached tail
   if (o->tail_bl.length()) {
     // we could adjust this if we truncate down within the same
@@ -5928,6 +5937,7 @@ int BlueStore::_do_truncate(
     dout(20) << __func__ << " clear cached tail" << dendl;
     o->clear_tail();
   }
+#endif
 
   // trim down fragments
   map<uint64_t,bluestore_extent_t>::iterator bp = o->onode.block_map.end();

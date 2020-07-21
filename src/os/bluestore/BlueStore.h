@@ -136,9 +136,11 @@ public:
     std::condition_variable flush_cond;   ///< wait here for unapplied txns
     set<TransContext*> flush_txns;   ///< committing or wal txns
 
+#if 0
     uint64_t tail_offset = 0;
     uint64_t tail_txc_seq = 0;
     bufferlist tail_bl;
+#endif
 
     Onode(const ghobject_t& o, const string& k)
       : nref(0),
@@ -156,10 +158,12 @@ public:
 	delete this;
     }
 
+#if 0
     void clear_tail() {
       tail_offset = 0;
       tail_bl.clear();
     }
+#endif
   };
   typedef boost::intrusive_ptr<Onode> OnodeRef;
 
@@ -408,6 +412,7 @@ public:
       return false;
     }
 
+#if 0
     /// if there is a wal on @seq, wait for it to apply
     void wait_for_wal_on_seq(uint64_t seq) {
       std::unique_lock<std::mutex> l(qlock);
@@ -429,6 +434,7 @@ public:
 	  break;
       }
     }
+#endif
   };
 
   class WALWQ : public ThreadPool::WorkQueue<TransContext> {
