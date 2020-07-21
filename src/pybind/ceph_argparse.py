@@ -299,7 +299,7 @@ class CephIPAddr(CephArgtype):
         self.port = p
 
     def __str__(self):
-        return '<IPaddr[:port]>'
+        return '<IPaddr>[:<port>]'
 
 
 class CephEntityAddr(CephIPAddr):
@@ -369,9 +369,9 @@ class CephPgid(CephArgtype):
 
 class CephName(CephArgtype):
     """
-    Name (type.id) where:
-    type is osd|mon|client|mds
-    id is a base10 int, if type == osd, or a string otherwise
+    Name (<type>.<id>) where:
+    <type> is osd|mon|client|mds
+    <id> is a base10 int, if <type> == osd, or a string otherwise
 
     Also accept '*'
     """
