@@ -659,8 +659,8 @@ int NVMEDevice::open(string p)
     zeros.zero();
   }
 
-  dout(1) << __func__ << " size " << size << " (" << pretty_si_t(size) << "B)"
-          << " block_size " << block_size << " (" << pretty_si_t(block_size)
+  dout(1) << __func__ << " size " << size << " (" << pretty_iec_t(size) << "B)"
+          << " block_size " << block_size << " (" << pretty_iec_t(block_size)
           << "B)" << dendl;
 
   return 0;

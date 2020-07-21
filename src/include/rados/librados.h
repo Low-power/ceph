@@ -239,7 +239,7 @@ struct rados_pool_stat_t {
   /// space used in bytes
   uint64_t num_bytes;
   /// space used in KB
-  uint64_t num_kb;
+  uint64_t num_kib;
   /// number of objects in the pool
   uint64_t num_objects;
   /// number of clones of objects
@@ -253,9 +253,9 @@ struct rados_pool_stat_t {
   /// (but found on at least one OSD)
   uint64_t num_objects_degraded;
   uint64_t num_rd;
-  uint64_t num_rd_kb;
+  uint64_t num_rd_kib;
   uint64_t num_wr;
-  uint64_t num_wr_kb;
+  uint64_t num_wr_kib;
 };
 
 /**

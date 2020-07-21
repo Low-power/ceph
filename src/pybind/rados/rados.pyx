@@ -106,7 +106,7 @@ cdef extern from "rados/librados.h" nogil:
 
     cdef struct rados_pool_stat_t:
         uint64_t num_bytes
-        uint64_t num_kb
+        uint64_t num_kib
         uint64_t num_objects
         uint64_t num_object_clones
         uint64_t num_object_copies
@@ -114,9 +114,9 @@ cdef extern from "rados/librados.h" nogil:
         uint64_t num_objects_unfound
         uint64_t num_objects_degraded
         uint64_t num_rd
-        uint64_t num_rd_kb
+        uint64_t num_rd_kib
         uint64_t num_wr
-        uint64_t num_wr_kb
+        uint64_t num_wr_kib
 
     void rados_buffer_free(char *buf)
 
@@ -2366,7 +2366,7 @@ returned %d, but should return zero on success." % (self.name, ret))
 
             - ``num_bytes`` (int) - size of pool in bytes
 
-            - ``num_kb`` (int) - size of pool in kbytes
+            - ``num_kib`` (int) - size of pool in KiBytes
 
             - ``num_objects`` (int) - number of objects in the pool
 
@@ -2383,11 +2383,11 @@ returned %d, but should return zero on success." % (self.name, ret))
 
             - ``num_rd`` (int) - bytes read
 
-            - ``num_rd_kb`` (int) - kbytes read
+            - ``num_rd_kib`` (int) - KiBytes read
 
             - ``num_wr`` (int) - bytes written
 
-            - ``num_wr_kb`` (int) - kbytes written
+            - ``num_wr_kib`` (int) - KiBytes written
         """
         self.require_ioctx_open()
         cdef rados_pool_stat_t stats
@@ -2396,7 +2396,7 @@ returned %d, but should return zero on success." % (self.name, ret))
         if ret < 0:
             raise make_ex(ret, "Ioctx.get_stats(%s): get_stats failed" % self.name)
         return {'num_bytes': stats.num_bytes,
-                'num_kb': stats.num_kb,
+                'num_kib': stats.num_kib,
                 'num_objects': stats.num_objects,
                 'num_object_clones': stats.num_object_clones,
                 'num_object_copies': stats.num_object_copies,
@@ -2404,9 +2404,9 @@ returned %d, but should return zero on success." % (self.name, ret))
                 "num_objects_unfound": stats.num_objects_unfound,
                 "num_objects_degraded": stats.num_objects_degraded,
                 "num_rd": stats.num_rd,
-                "num_rd_kb": stats.num_rd_kb,
+                "num_rd_kib": stats.num_rd_kib,
                 "num_wr": stats.num_wr,
-                "num_wr_kb": stats.num_wr_kb}
+                "num_wr_kib": stats.num_wr_kib}
 
     @requires(('key', str_type))
     def remove_object(self, key):

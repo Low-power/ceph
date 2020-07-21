@@ -1386,9 +1386,9 @@ void PGMonitor::dump_object_stat_sum(TextTable &tbl, Formatter *f,
       f->dump_int("quota_bytes", pool->quota_max_bytes);
       f->dump_int("dirty", sum.num_objects_dirty);
       f->dump_int("rd", sum.num_rd);
-      f->dump_int("rd_bytes", sum.num_rd_kb * 1024ull);
+      f->dump_int("rd_bytes", sum.num_rd_kib * 1024ull);
       f->dump_int("wr", sum.num_wr);
-      f->dump_int("wr_bytes", sum.num_wr_kb * 1024ull);
+      f->dump_int("wr_bytes", sum.num_wr_kib * 1024ull);
       f->dump_int("raw_bytes_used", sum.num_bytes * raw_used_rate * curr_object_copies_rate);
     }
   } else {
@@ -1588,9 +1588,9 @@ void PGMonitor::dump_fs_stats(stringstream &ss, Formatter *f, bool verbose) cons
     if (verbose) {
       tbl.define_column("OBJECTS", TextTable::LEFT, TextTable::RIGHT);
     }
-    tbl << stringify(si_t(pg_map.osd_sum.kb*1024))
-        << stringify(si_t(pg_map.osd_sum.kb_avail*1024))
-        << stringify(si_t(pg_map.osd_sum.kb_used*1024));
+    tbl << stringify(iec_t(pg_map.osd_sum.kb*1024))
+        << stringify(iec_t(pg_map.osd_sum.kb_avail*1024))
+        << stringify(iec_t(pg_map.osd_sum.kb_used*1024));
     float used = 0.0;
     if (pg_map.osd_sum.kb > 0) {
       used = ((float)pg_map.osd_sum.kb_used / pg_map.osd_sum.kb);
@@ -2409,9 +2409,9 @@ void PGMonitor::get_health(list<pair<health_status_t,string> >& summary,
       if (detail) {
 	ostringstream ss;
 	ss << "cache pool '" << name
-	   << "' with " << si_t(st.stats.sum.num_bytes)
+	   << "' with " << iec_t(st.stats.sum.num_bytes)
 	   << "B at/near target max "
-	   << si_t(p->second.target_max_bytes) << "B";
+	   << iec_t(p->second.target_max_bytes) << "B";
 	detail->push_back(make_pair(HEALTH_WARN, ss.str()));
       }
     }

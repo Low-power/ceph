@@ -640,9 +640,9 @@ void OSDService::promote_throttle_recalibrate()
   uint64_t attempts, obj, bytes;
   promote_counter.sample_and_attenuate(&attempts, &obj, &bytes);
   dout(10) << __func__ << " " << attempts << " attempts, promoted "
-	   << obj << " objects and " << pretty_si_t(bytes) << " bytes; target "
+	   << obj << " objects and " << pretty_iec_t(bytes) << " bytes; target "
 	   << target_obj_sec << " obj/sec or "
-	   << pretty_si_t(target_bytes_sec) << " bytes/sec"
+	   << pretty_iec_t(target_bytes_sec) << " bytes/sec"
 	   << dendl;
 
   // calculate what the probability *should* be, given the targets

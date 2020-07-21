@@ -324,17 +324,17 @@ inline ostream& operator<<(ostream& out, const prettybyte_t& b)
 {
   uint64_t bump_after = 100;
   if (b.v > bump_after << 60)
-    return out << (b.v >> 60) << " EB";    
+    return out << (b.v >> 60) << " EiB";
   if (b.v > bump_after << 50)
-    return out << (b.v >> 50) << " PB";    
+    return out << (b.v >> 50) << " PiB";
   if (b.v > bump_after << 40)
-    return out << (b.v >> 40) << " TB";    
+    return out << (b.v >> 40) << " TiB";
   if (b.v > bump_after << 30)
-    return out << (b.v >> 30) << " GB";    
+    return out << (b.v >> 30) << " GiB";
   if (b.v > bump_after << 20)
-    return out << (b.v >> 20) << " MB";    
+    return out << (b.v >> 20) << " MiB";
   if (b.v > bump_after << 10)
-    return out << (b.v >> 10) << " kB";
+    return out << (b.v >> 10) << " KiB";
   return out << b.v << " bytes";
 }
 
@@ -362,6 +362,28 @@ inline ostream& operator<<(ostream& out, const si_t& b)
   return out << b.v;
 }
 
+struct iec_t {
+	uint64_t v;
+	iec_t(uint64_t _v) : v(_v) {}
+};
+
+inline ostream &operator<<(ostream &out, const iec_t &b) {
+  uint64_t bump_after = 100;
+  if (b.v > bump_after << 60)
+    return out << (b.v >> 60) << "Ei";
+  if (b.v > bump_after << 50)
+    return out << (b.v >> 50) << "Pi";
+  if (b.v > bump_after << 40)
+    return out << (b.v >> 40) << "Ti";
+  if (b.v > bump_after << 30)
+    return out << (b.v >> 30) << "Gi";
+  if (b.v > bump_after << 20)
+    return out << (b.v >> 20) << "Mi";
+  if (b.v > bump_after << 10)
+    return out << (b.v >> 10) << "Ki";
+  return out << b.v;
+}
+
 struct pretty_si_t {
   uint64_t v;
   // cppcheck-suppress noExplicitConstructor
@@ -386,6 +408,28 @@ inline ostream& operator<<(ostream& out, const pretty_si_t& b)
   return out << b.v << " ";
 }
 
+struct pretty_iec_t {
+	uint64_t v;
+	pretty_iec_t(uint64_t _v) : v(_v) {}
+};
+
+inline ostream& operator<<(ostream& out, const pretty_iec_t& b) {
+  uint64_t bump_after = 100;
+  if (b.v > bump_after << 60)
+    return out << (b.v >> 60) << " Ei";
+  if (b.v > bump_after << 50)
+    return out << (b.v >> 50) << " Pi";
+  if (b.v > bump_after << 40)
+    return out << (b.v >> 40) << " Ti";
+  if (b.v > bump_after << 30)
+    return out << (b.v >> 30) << " Gi";
+  if (b.v > bump_after << 20)
+    return out << (b.v >> 20) << " Mi";
+  if (b.v > bump_after << 10)
+    return out << (b.v >> 10) << " Ki";
+  return out << b.v << " ";
+}
+
 struct kb_t {
   uint64_t v;
   // cppcheck-suppress noExplicitConstructor
@@ -396,14 +440,14 @@ inline ostream& operator<<(ostream& out, const kb_t& kb)
 {
   uint64_t bump_after = 100;
   if (kb.v > bump_after << 40)
-    return out << (kb.v >> 40) << " PB";    
+    return out << (kb.v >> 40) << " PiB";
   if (kb.v > bump_after << 30)
-    return out << (kb.v >> 30) << " TB";    
+    return out << (kb.v >> 30) << " TiB";
   if (kb.v > bump_after << 20)
-    return out << (kb.v >> 20) << " GB";    
+    return out << (kb.v >> 20) << " GiB";
   if (kb.v > bump_after << 10)
-    return out << (kb.v >> 10) << " MB";
-  return out << kb.v << " kB";
+    return out << (kb.v >> 10) << " MiB";
+  return out << kb.v << " KiB";
 }
 
 inline ostream& operator<<(ostream& out, const ceph_mon_subscribe_item& i)

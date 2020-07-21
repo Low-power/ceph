@@ -4277,7 +4277,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	}
 	// XXX the op.extent.length is the requested length for async read
 	// On error this length is changed to 0 after the error comes back.
-	ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(op.extent.length, 10);
+	ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(op.extent.length, 10);
 	ctx->delta_stats.num_rd++;
 
 	// Skip checking the result and just proceed to the next operation
@@ -4305,7 +4305,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	if (r < 0)
 	  result = r;
 	else
-	  ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(bl.length(), 10);
+	  ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(bl.length(), 10);
 	ctx->delta_stats.num_rd++;
 	dout(10) << " map_extents done on object " << soid << dendl;
       }
@@ -4413,7 +4413,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 
 	dout(10) << " sparse_read got " << total_read << " bytes from object " << soid << dendl;
       }
-      ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(op.extent.length, 10);
+      ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(op.extent.length, 10);
       ctx->delta_stats.num_rd++;
       break;
 
@@ -4646,7 +4646,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	if (r >= 0) {
 	  op.xattr.value_len = osd_op.outdata.length();
 	  result = 0;
-	  ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
+	  ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
 	} else
 	  result = r;
 
@@ -4666,7 +4666,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
         
         bufferlist bl;
         ::encode(out, bl);
-	ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(bl.length(), 10);
+	ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(bl.length(), 10);
         ctx->delta_stats.num_rd++;
         osd_op.outdata.claim_append(bl);
       }
@@ -4698,7 +4698,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	    break;
 
 	  ctx->delta_stats.num_rd++;
-	  ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(xattr.length(), 10);
+	  ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(xattr.length(), 10);
 	}
 
 	switch (op.xattr.cmp_mode) {
@@ -5612,7 +5612,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	  }
 	} // else return empty out_set
 	::encode(out_set, osd_op.outdata);
-	ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
+	ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
 	ctx->delta_stats.num_rd++;
       }
       break;
@@ -5655,7 +5655,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	  }
 	} // else return empty out_set
 	::encode(out_set, osd_op.outdata);
-	ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
+	ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
 	ctx->delta_stats.num_rd++;
       }
       break;
@@ -5669,7 +5669,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
       ++ctx->num_read;
       {
 	osd->store->omap_get_header(ch, ghobject_t(soid), &osd_op.outdata);
-	ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
+	ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
 	ctx->delta_stats.num_rd++;
       }
       break;
@@ -5692,7 +5692,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	  osd->store->omap_get_values(ch, ghobject_t(soid), keys_to_get, &out);
 	} // else return empty omap entries
 	::encode(out, osd_op.outdata);
-	ctx->delta_stats.num_rd_kb += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
+	ctx->delta_stats.num_rd_kib += SHIFT_ROUND_UP(osd_op.outdata.length(), 10);
 	ctx->delta_stats.num_rd++;
       }
       break;
@@ -5732,7 +5732,7 @@ int ReplicatedPG::do_osd_ops(OpContext *ctx, vector<OSDOp>& ops)
 	  }
 	} // else leave out empty
 
-	//Should set num_rd_kb based on encode length of map
+	//Should set num_rd_kib based on encode length of map
 	ctx->delta_stats.num_rd++;
 
 	int r = 0;
@@ -6450,7 +6450,7 @@ void ReplicatedPG::write_update_size_and_usage(object_stat_sum_t& delta_stats, o
   }
   delta_stats.num_wr++;
   if (count_bytes)
-    delta_stats.num_wr_kb += SHIFT_ROUND_UP(length, 10);
+    delta_stats.num_wr_kib += SHIFT_ROUND_UP(length, 10);
 }
 
 void ReplicatedPG::add_interval_usage(interval_set<uint64_t>& s, object_stat_sum_t& delta_stats)
@@ -7580,7 +7580,7 @@ void ReplicatedPG::finish_copyfrom(OpContext *ctx)
     ctx->delta_stats.num_bytes += obs.oi.size;
   }
   ctx->delta_stats.num_wr++;
-  ctx->delta_stats.num_wr_kb += SHIFT_ROUND_UP(obs.oi.size, 10);
+  ctx->delta_stats.num_wr_kib += SHIFT_ROUND_UP(obs.oi.size, 10);
 
   osd->logger->inc(l_osd_copyfrom);
 }

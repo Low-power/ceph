@@ -682,7 +682,7 @@ TRACEPOINT_EVENT(librados, rados_ioctx_pool_stat_exit,
         struct rados_pool_stat_t*, stats),
     TP_FIELDS(
         ctf_integer(int, retval, retval)
-        ctf_integer(uint64_t, num_kb, stats->num_kb)
+        ctf_integer(uint64_t, num_kib, stats->num_kib)
         ctf_integer(uint64_t, num_bytes, stats->num_bytes)
         ctf_integer(uint64_t, num_objects, stats->num_objects)
         ctf_integer(uint64_t, num_object_clones, stats->num_object_clones)
@@ -691,9 +691,9 @@ TRACEPOINT_EVENT(librados, rados_ioctx_pool_stat_exit,
         ctf_integer(uint64_t, num_objects_unfound, stats->num_objects_unfound)
         ctf_integer(uint64_t, num_objects_degraded, stats->num_objects_degraded)
         ctf_integer(uint64_t, num_rd, stats->num_rd)
-        ctf_integer(uint64_t, num_rd_kb, stats->num_rd_kb)
+        ctf_integer(uint64_t, num_rd_kib, stats->num_rd_kib)
         ctf_integer(uint64_t, num_wr, stats->num_wr)
-        ctf_integer(uint64_t, num_wr_kb, stats->num_wr_kb)
+        ctf_integer(uint64_t, num_wr_kib, stats->num_wr_kib)
     )
 )
 

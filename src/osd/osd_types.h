@@ -1521,9 +1521,9 @@ struct object_stat_sum_t {
   int64_t num_objects_degraded;
   int64_t num_objects_unfound;
   int64_t num_rd;
-  int64_t num_rd_kb;
+  int64_t num_rd_kib;
   int64_t num_wr;
-  int64_t num_wr_kb;
+  int64_t num_wr_kib;
   int64_t num_scrub_errors;	// total deep and shallow scrub errors
   int64_t num_objects_recovered;
   int64_t num_bytes_recovered;
@@ -1553,7 +1553,7 @@ struct object_stat_sum_t {
       num_objects(0), num_object_clones(0), num_object_copies(0),
       num_objects_missing_on_primary(0), num_objects_degraded(0),
       num_objects_unfound(0),
-      num_rd(0), num_rd_kb(0), num_wr(0), num_wr_kb(0),
+      num_rd(0), num_rd_kib(0), num_wr(0), num_wr_kib(0),
       num_scrub_errors(0),
       num_objects_recovered(0),
       num_bytes_recovered(0),
@@ -1589,9 +1589,9 @@ struct object_stat_sum_t {
     FLOOR(num_objects_misplaced);
     FLOOR(num_objects_unfound);
     FLOOR(num_rd);
-    FLOOR(num_rd_kb);
+    FLOOR(num_rd_kib);
     FLOOR(num_wr);
-    FLOOR(num_wr_kb);
+    FLOOR(num_wr_kib);
     FLOOR(num_scrub_errors);
     FLOOR(num_shallow_scrub_errors);
     FLOOR(num_deep_scrub_errors);
@@ -1635,9 +1635,9 @@ struct object_stat_sum_t {
     SPLIT(num_objects_misplaced);
     SPLIT(num_objects_unfound);
     SPLIT(num_rd);
-    SPLIT(num_rd_kb);
+    SPLIT(num_rd_kib);
     SPLIT(num_wr);
-    SPLIT(num_wr_kb);
+    SPLIT(num_wr_kib);
     SPLIT(num_scrub_errors);
     SPLIT(num_shallow_scrub_errors);
     SPLIT(num_deep_scrub_errors);
@@ -1689,9 +1689,9 @@ struct object_stat_sum_t {
         sizeof(num_objects_degraded) +
         sizeof(num_objects_unfound) +
         sizeof(num_rd) +
-        sizeof(num_rd_kb) +
+        sizeof(num_rd_kib) +
         sizeof(num_wr) +
-        sizeof(num_wr_kb) +
+        sizeof(num_wr_kib) +
         sizeof(num_scrub_errors) +
         sizeof(num_objects_recovered) +
         sizeof(num_bytes_recovered) +

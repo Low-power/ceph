@@ -78,8 +78,8 @@ static int compute_image_disk_usage(const std::string& name,
       full_name += "@" + snap_name;
     }
     tbl << full_name
-        << stringify(si_t(size))
-        << stringify(si_t(*used_size))
+        << stringify(iec_t(size))
+        << stringify(iec_t(*used_size))
         << TextTable::endrow;
   }
   return 0;
@@ -225,8 +225,8 @@ out:
   } else {
     if (count > 1) {
       tbl << "<TOTAL>"
-          << stringify(si_t(total_prov))
-          << stringify(si_t(total_used))
+          << stringify(iec_t(total_prov))
+          << stringify(iec_t(total_used))
           << TextTable::endrow;
     }
     std::cout << tbl;

@@ -1083,11 +1083,11 @@ WRITE_CLASS_ENCODER(RGWBucketEntryPoint)
 struct RGWStorageStats
 {
   RGWObjCategory category;
-  uint64_t num_kb;
-  uint64_t num_kb_rounded;
+  uint64_t num_kib;
+  uint64_t num_kib_rounded;
   uint64_t num_objects;
 
-  RGWStorageStats() : category(RGW_OBJ_CATEGORY_NONE), num_kb(0), num_kb_rounded(0), num_objects(0) {}
+  RGWStorageStats() : category(RGW_OBJ_CATEGORY_NONE), num_kib(0), num_kib_rounded(0), num_objects(0) {}
 
   void dump(Formatter *f) const;
 };
@@ -1855,12 +1855,12 @@ static inline const char *rgw_obj_category_name(RGWObjCategory category)
   return "unknown";
 }
 
-static inline uint64_t rgw_rounded_kb(uint64_t bytes)
+static inline uint64_t rgw_rounded_kib(uint64_t bytes)
 {
   return (bytes + 1023) / 1024;
 }
 
-static inline uint64_t rgw_rounded_objsize_kb(uint64_t bytes)
+static inline uint64_t rgw_rounded_objsize_kib(uint64_t bytes)
 {
   return ((bytes + 4095) & ~4095) / 1024;
 }

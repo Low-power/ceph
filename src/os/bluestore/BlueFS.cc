@@ -105,7 +105,7 @@ int BlueFS::add_block_device(unsigned id, string path)
     return r;
   }
   dout(1) << __func__ << " bdev " << id << " path " << path
-	  << " size " << pretty_si_t(b->get_size()) << "B" << dendl;
+	  << " size " << pretty_iec_t(b->get_size()) << "B" << dendl;
   bdev[id] = b;
   ioc[id] = new IOContext(NULL);
   return 0;
@@ -199,9 +199,9 @@ void BlueFS::get_usage(vector<pair<uint64_t,uint64_t>> *usage)
       (block_total[id] - (*usage)[id].first) * 100 / block_total[id];
     dout(10) << __func__ << " bdev " << id
 	     << " free " << (*usage)[id].first
-	     << " (" << pretty_si_t((*usage)[id].first) << "B)"
+	     << " (" << pretty_iec_t((*usage)[id].first) << "B)"
 	     << " / " << (*usage)[id].second
-	     << " (" << pretty_si_t((*usage)[id].second) << "B)"
+	     << " (" << pretty_iec_t((*usage)[id].second) << "B)"
 	     << ", used " << used << "%"
 	     << dendl;
   }

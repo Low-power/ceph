@@ -2287,7 +2287,7 @@ int librados::Rados::get_pool_stats(std::list<string>& v,
        ++p) {
     pool_stat_t& pv = result[p->first];
     object_stat_sum_t *sum = &p->second.stats.sum;
-    pv.num_kb = SHIFT_ROUND_UP(sum->num_bytes, 10);
+    pv.num_kib = SHIFT_ROUND_UP(sum->num_bytes, 10);
     pv.num_bytes = sum->num_bytes;
     pv.num_objects = sum->num_objects;
     pv.num_object_clones = sum->num_object_clones;
@@ -2296,9 +2296,9 @@ int librados::Rados::get_pool_stats(std::list<string>& v,
     pv.num_objects_unfound = sum->num_objects_unfound;
     pv.num_objects_degraded = sum->num_objects_degraded;
     pv.num_rd = sum->num_rd;
-    pv.num_rd_kb = sum->num_rd_kb;
+    pv.num_rd_kib = sum->num_rd_kib;
     pv.num_wr = sum->num_wr;
-    pv.num_wr_kb = sum->num_wr_kb;
+    pv.num_wr_kib = sum->num_wr_kib;
   }
   return r;
 }
@@ -3187,7 +3187,7 @@ extern "C" int rados_ioctx_pool_stat(rados_ioctx_t io, struct rados_pool_stat_t 
   }
 
   ::pool_stat_t& r = rawresult[pool_name];
-  stats->num_kb = SHIFT_ROUND_UP(r.stats.sum.num_bytes, 10);
+  stats->num_kib = SHIFT_ROUND_UP(r.stats.sum.num_bytes, 10);
   stats->num_bytes = r.stats.sum.num_bytes;
   stats->num_objects = r.stats.sum.num_objects;
   stats->num_object_clones = r.stats.sum.num_object_clones;
@@ -3198,9 +3198,9 @@ extern "C" int rados_ioctx_pool_stat(rados_ioctx_t io, struct rados_pool_stat_t 
     r.stats.sum.num_objects_degraded +
     r.stats.sum.num_objects_misplaced; // FIXME: this is imprecise
   stats->num_rd = r.stats.sum.num_rd;
-  stats->num_rd_kb = r.stats.sum.num_rd_kb;
+  stats->num_rd_kib = r.stats.sum.num_rd_kib;
   stats->num_wr = r.stats.sum.num_wr;
-  stats->num_wr_kb = r.stats.sum.num_wr_kb;
+  stats->num_wr_kib = r.stats.sum.num_wr_kib;
   tracepoint(librados, rados_ioctx_pool_stat_exit, 0, stats);
   return 0;
 }

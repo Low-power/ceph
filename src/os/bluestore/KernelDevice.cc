@@ -139,9 +139,9 @@ int KernelDevice::open(string p)
 
   dout(1) << __func__
 	  << " size " << size
-	  << " (" << pretty_si_t(size) << "B)"
+	  << " (" << pretty_iec_t(size) << "B)"
 	  << " block_size " << block_size
-	  << " (" << pretty_si_t(block_size) << "B)"
+	  << " (" << pretty_iec_t(block_size) << "B)"
 	  << dendl;
   return 0;
 

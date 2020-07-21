@@ -1166,7 +1166,7 @@ void PGMap::recovery_rate_summary(Formatter *f, ostream *out,
       f->dump_int("num_bytes_recovered", pos_delta.stats.sum.num_bytes_recovered);
       f->dump_int("num_keys_recovered", pos_delta.stats.sum.num_keys_recovered);
     } else {
-      *out << pretty_si_t(bps) << "B/s";
+      *out << pretty_iec_t(bps) << "B/s";
       if (pos_delta.stats.sum.num_keys_recovered)
 	*out << ", " << pretty_si_t(kps) << "keys/s";
       *out << ", " << pretty_si_t(objps) << "objects/s";
@@ -1218,19 +1218,19 @@ void PGMap::client_io_rate_summary(Formatter *f, ostream *out,
   if (pos_delta.stats.sum.num_rd ||
       pos_delta.stats.sum.num_wr) {
     if (pos_delta.stats.sum.num_rd) {
-      int64_t rd = (pos_delta.stats.sum.num_rd_kb << 10) / (double)delta_stamp;
+      int64_t rd = (pos_delta.stats.sum.num_rd_kib << 10) / (double)delta_stamp;
       if (f) {
 	f->dump_int("read_bytes_sec", rd);
       } else {
-	*out << pretty_si_t(rd) << "B/s rd, ";
+	*out << pretty_iec_t(rd) << "B/s rd, ";
       }
     }
     if (pos_delta.stats.sum.num_wr) {
-      int64_t wr = (pos_delta.stats.sum.num_wr_kb << 10) / (double)delta_stamp;
+      int64_t wr = (pos_delta.stats.sum.num_wr_kib << 10) / (double)delta_stamp;
       if (f) {
 	f->dump_int("write_bytes_sec", wr);
       } else {
-	*out << pretty_si_t(wr) << "B/s wr, ";
+	*out << pretty_iec_t(wr) << "B/s wr, ";
       }
     }
     int64_t iops_rd = pos_delta.stats.sum.num_rd / (double)delta_stamp;
@@ -1276,7 +1276,7 @@ void PGMap::cache_io_rate_summary(Formatter *f, ostream *out,
     if (f) {
       f->dump_int("flush_bytes_sec", flush);
     } else {
-      *out << pretty_si_t(flush) << "B/s flush";
+      *out << pretty_iec_t(flush) << "B/s flush";
       have_output = true;
     }
   }
@@ -1287,7 +1287,7 @@ void PGMap::cache_io_rate_summary(Formatter *f, ostream *out,
     } else {
       if (have_output)
 	*out << ", ";
-      *out << pretty_si_t(evict) << "B/s evict";
+      *out << pretty_iec_t(evict) << "B/s evict";
       have_output = true;
     }
   }
@@ -1608,16 +1608,16 @@ void PGMap::print_oneline_summary(Formatter *f, ostream *out) const
     if (out)
       *out << "; ";
     if (pos_delta.stats.sum.num_rd) {
-      int64_t rd = (pos_delta.stats.sum.num_rd_kb << 10) / (double)stamp_delta;
+      int64_t rd = (pos_delta.stats.sum.num_rd_kib << 10) / (double)stamp_delta;
       if (out)
-	*out << pretty_si_t(rd) << "B/s rd, ";
+	*out << pretty_iec_t(rd) << "B/s rd, ";
       if (f)
 	f->dump_unsigned("read_bytes_sec", rd);
     }
     if (pos_delta.stats.sum.num_wr) {
-      int64_t wr = (pos_delta.stats.sum.num_wr_kb << 10) / (double)stamp_delta;
+      int64_t wr = (pos_delta.stats.sum.num_wr_kib << 10) / (double)stamp_delta;
       if (out)
-	*out << pretty_si_t(wr) << "B/s wr, ";
+	*out << pretty_iec_t(wr) << "B/s wr, ";
       if (f)
 	f->dump_unsigned("write_bytes_sec", wr);
     }

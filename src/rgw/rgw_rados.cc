@@ -7860,8 +7860,8 @@ static void accumulate_raw_stats(rgw_bucket_dir_header& header, map<RGWObjCatego
     RGWStorageStats& s = stats[category];
     struct rgw_bucket_category_stats& header_stats = iter->second;
     s.category = (RGWObjCategory)iter->first;
-    s.num_kb += ((header_stats.total_size + 1023) / 1024);
-    s.num_kb_rounded += ((header_stats.total_size_rounded + 1023) / 1024);
+    s.num_kib += ((header_stats.total_size + 1023) / 1024);
+    s.num_kib_rounded += ((header_stats.total_size_rounded + 1023) / 1024);
     s.num_objects += header_stats.num_entries;
   }
 }
@@ -10822,8 +10822,8 @@ public:
     if (r >= 0) {
       RGWStorageStats stats;
 
-      stats.num_kb = (hs.total_bytes + 1023) / 1024;
-      stats.num_kb_rounded = (hs.total_bytes_rounded + 1023) / 1024;
+      stats.num_kib = (hs.total_bytes + 1023) / 1024;
+      stats.num_kib_rounded = (hs.total_bytes_rounded + 1023) / 1024;
       stats.num_objects = hs.total_entries;
 
       cb->set_response(stats);
@@ -10846,8 +10846,8 @@ int RGWRados::get_user_stats(const rgw_user& user, RGWStorageStats& stats)
 
   cls_user_stats& hs = header.stats;
 
-  stats.num_kb = (hs.total_bytes + 1023) / 1024;
-  stats.num_kb_rounded = (hs.total_bytes_rounded + 1023) / 1024;
+  stats.num_kib = (hs.total_bytes + 1023) / 1024;
+  stats.num_kib_rounded = (hs.total_bytes_rounded + 1023) / 1024;
   stats.num_objects = hs.total_entries;
 
   return 0;
@@ -12281,8 +12281,8 @@ int RGWRados::update_user_bucket_stats(const string& user_id, rgw_bucket& bucket
 {
   cls_user_bucket_entry entry;
 
-  entry.size = stats.num_kb * 1024;
-  entry.size_rounded = stats.num_kb_rounded * 1024;
+  entry.size = stats.num_kib * 1024;
+  entry.size_rounded = stats.num_kib_rounded * 1024;
   entry.count += stats.num_objects;
 
   list<cls_user_bucket_entry> entries;

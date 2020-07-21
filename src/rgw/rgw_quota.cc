@@ -102,14 +102,14 @@ public:
 template<class T>
 bool RGWQuotaCache<T>::can_use_cached_stats(RGWQuotaInfo& quota, RGWStorageStats& cached_stats)
 {
-  if (quota.max_size_kb >= 0) {
+  if (quota.max_size_kib >= 0) {
     if (quota.max_size_soft_threshold < 0) {
-      quota.max_size_soft_threshold = quota.max_size_kb * store->ctx()->_conf->rgw_bucket_quota_soft_threshold;
+      quota.max_size_soft_threshold = quota.max_size_kib * store->ctx()->_conf->rgw_bucket_quota_soft_threshold;
     }
 
-    if (cached_stats.num_kb_rounded >= (uint64_t)quota.max_size_soft_threshold) {
+    if (cached_stats.num_kib_rounded >= (uint64_t)quota.max_size_soft_threshold) {
       ldout(store->ctx(), 20) << "quota: can't use cached stats, exceeded soft threshold (size): "
-        << cached_stats.num_kb_rounded << " >= " << quota.max_size_soft_threshold << dendl;
+        << cached_stats.num_kib_rounded << " >= " << quota.max_size_soft_threshold << dendl;
       return false;
     }
   }
@@ -227,19 +227,19 @@ public:
   RGWQuotaStatsUpdate(int _objs_delta, uint64_t _added_bytes, uint64_t _removed_bytes) : 
                     objs_delta(_objs_delta), added_bytes(_added_bytes), removed_bytes(_removed_bytes) {}
   bool update(RGWQuotaCacheStats *entry) {
-    uint64_t rounded_kb_added = rgw_rounded_objsize_kb(added_bytes);
-    uint64_t rounded_kb_removed = rgw_rounded_objsize_kb(removed_bytes);
+    uint64_t rounded_kib_added = rgw_rounded_objsize_kib(added_bytes);
+    uint64_t rounded_kib_removed = rgw_rounded_objsize_kib(removed_bytes);
 
-    if (((int64_t)(entry->stats.num_kb_rounded + rounded_kb_added - rounded_kb_removed)) >= 0) {
-      entry->stats.num_kb_rounded += (rounded_kb_added - rounded_kb_removed);
+    if (((int64_t)(entry->stats.num_kib_rounded + rounded_kib_added - rounded_kib_removed)) >= 0) {
+      entry->stats.num_kib_rounded += (rounded_kib_added - rounded_kib_removed);
     } else {
-      entry->stats.num_kb_rounded = 0;
+      entry->stats.num_kib_rounded = 0;
     }
     
-    if (((int64_t)(entry->stats.num_kb + ((added_bytes - removed_bytes) / 1024))) >= 0) {
-      entry->stats.num_kb += (added_bytes - removed_bytes) / 1024;
+    if (((int64_t)(entry->stats.num_kib + ((added_bytes - removed_bytes) / 1024))) >= 0) {
+      entry->stats.num_kib += (added_bytes - removed_bytes) / 1024;
     } else {
-      entry->stats.num_kb = 0;
+      entry->stats.num_kib = 0;
     }
     
     if (((int64_t)(entry->stats.num_objects + objs_delta)) >= 0) {
@@ -305,8 +305,8 @@ void BucketAsyncRefreshHandler::handle_response(int r)
   map<RGWObjCategory, RGWStorageStats>::iterator iter;
   for (iter = stats->begin(); iter != stats->end(); ++iter) {
     RGWStorageStats& s = iter->second;
-    bs.num_kb += s.num_kb;
-    bs.num_kb_rounded += s.num_kb_rounded;
+    bs.num_kib += s.num_kib;
+    bs.num_kib_rounded += s.num_kib_rounded;
     bs.num_objects += s.num_objects;
   }
 
@@ -357,8 +357,8 @@ int RGWBucketStatsCache::fetch_stats_from_storage(const rgw_user& user, rgw_buck
   map<RGWObjCategory, RGWStorageStats>::iterator iter;
   for (iter = bucket_stats.begin(); iter != bucket_stats.end(); ++iter) {
     RGWStorageStats& s = iter->second;
-    stats.num_kb += s.num_kb;
-    stats.num_kb_rounded += s.num_kb_rounded;
+    stats.num_kib += s.num_kib;
+    stats.num_kib_rounded += s.num_kib_rounded;
     stats.num_objects += s.num_objects;
   }
 
@@ -700,7 +700,7 @@ class RGWQuotaHandlerImpl : public RGWQuotaHandler {
       return 0;
 
     ldout(store->ctx(), 20) << entity << " quota: max_objects=" << quota.max_objects
-                            << " max_size_kb=" << quota.max_size_kb << dendl;
+                            << " max_size_kib=" << quota.max_size_kib << dendl;
 
     if (quota.max_objects >= 0 &&
         stats.num_objects + num_objs > (uint64_t)quota.max_objects) {
@@ -709,10 +709,10 @@ class RGWQuotaHandlerImpl : public RGWQuotaHandler {
 
       return -ERR_QUOTA_EXCEEDED;
     }
-    if (quota.max_size_kb >= 0 &&
-               stats.num_kb_rounded + size_kb > (uint64_t)quota.max_size_kb) {
-      ldout(store->ctx(), 10) << "quota exceeded: stats.num_kb_rounded=" << stats.num_kb_rounded << " size_kb=" << size_kb
-                              << " " << entity << "_quota.max_size_kb=" << quota.max_size_kb << dendl;
+    if (quota.max_size_kib >= 0 &&
+               stats.num_kib_rounded + size_kib > (uint64_t)quota.max_size_kib) {
+      ldout(store->ctx(), 10) << "quota exceeded: stats.num_kib_rounded=" << stats.num_kib_rounded << " size_kb=" << size_kb
+                              << " " << entity << "_quota.max_size_kib=" << quota.max_size_kib << dendl;
       return -ERR_QUOTA_EXCEEDED;
     }
 
@@ -730,7 +730,7 @@ public:
     if (!bucket_quota.enabled && !user_quota.enabled)
       return 0;
 
-    uint64_t size_kb = rgw_rounded_objsize_kb(size);
+    uint64_t size_kib = rgw_rounded_objsize_kib(size);
 
     /*
      * we need to fetch bucket stats if the user quota is enabled, because the whole system relies
@@ -744,7 +744,7 @@ public:
       if (ret < 0)
         return ret;
 
-      ret = check_quota("bucket", bucket_quota, bucket_stats, num_objs, size_kb);
+      ret = check_quota("bucket", bucket_quota, bucket_stats, num_objs, size_kib);
       if (ret < 0)
 	return ret;
     }
@@ -755,7 +755,7 @@ public:
       if (ret < 0)
         return ret;
 
-      ret = check_quota("user", user_quota, user_stats, num_objs, size_kb);
+      ret = check_quota("user", user_quota, user_stats, num_objs, size_kib);
       if (ret < 0)
 	return ret;
     }

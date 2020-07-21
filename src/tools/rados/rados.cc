@@ -1962,8 +1962,8 @@ static int rados_tool_common(const std::map < std::string, std::string > &opts,
 	     "%12s %12s %12s %12s "
 	     "%12s %12s %12s %12s %12s\n",
 	     "pool name",
-	     "KB", "objects", "clones", "degraded",
-	     "unfound", "rd", "rd KB", "wr", "wr KB");
+	     "KiB", "objects", "clones", "degraded",
+	     "unfound", "rd", "rd KiB", "wr", "wr KiB");
     } else {
       formatter->open_object_section("stats");
       formatter->open_array_section("pools");
@@ -1978,13 +1978,13 @@ static int rados_tool_common(const std::map < std::string, std::string > &opts,
 	       "%12lld %12lld %12lld %12lld "
 	       "%12lld %12lld %12lld %12lld %12lld\n",
 	       pool_name,
-	       (long long)s.num_kb,
+	       (long long)s.num_kib,
 	       (long long)s.num_objects,
 	       (long long)s.num_object_clones,
 	       (long long)s.num_objects_degraded,
 	       (long long)s.num_objects_unfound,
-	       (long long)s.num_rd, (long long)s.num_rd_kb,
-	         (long long)s.num_wr, (long long)s.num_wr_kb);
+	       (long long)s.num_rd, (long long)s.num_rd_kib,
+	         (long long)s.num_wr, (long long)s.num_wr_kib);
       } else {
         formatter->open_object_section("pool");
         int64_t pool_id = rados.pool_lookup(pool_name);
@@ -1994,7 +1994,7 @@ static int rados_tool_common(const std::map < std::string, std::string > &opts,
         else
           cerr << "ERROR: lookup_pg_pool_name for name=" << pool_name << " returned " << pool_id << std::endl;
 	formatter->dump_format("size_bytes", "%lld", s.num_bytes);
-	formatter->dump_format("size_kb", "%lld", s.num_kb);
+	formatter->dump_format("size_kb", "%lld", s.num_kib);
 	formatter->dump_format("num_objects", "%lld", s.num_objects);
 	formatter->dump_format("num_object_clones", "%lld", s.num_object_clones);
 	formatter->dump_format("num_object_copies", "%lld", s.num_object_copies);
@@ -2002,9 +2002,9 @@ static int rados_tool_common(const std::map < std::string, std::string > &opts,
 	formatter->dump_format("num_objects_unfound", "%lld", s.num_objects_unfound);
 	formatter->dump_format("num_objects_degraded", "%lld", s.num_objects_degraded);
 	formatter->dump_format("read_ops", "%lld", s.num_rd);
-	formatter->dump_format("read_bytes", "%lld", s.num_rd_kb * 1024ull);
+	formatter->dump_format("read_bytes", "%lld", s.num_rd_kib * 1024ull);
 	formatter->dump_format("write_ops", "%lld", s.num_wr);
-	formatter->dump_format("write_bytes", "%lld", s.num_wr_kb * 1024ull);
+	formatter->dump_format("write_bytes", "%lld", s.num_wr_kib * 1024ull);
 	formatter->close_section();
       }
     }

@@ -125,7 +125,7 @@ int do_list(librbd::RBD &rbd, librados::IoCtx& io_ctx, bool lflag,
       f->close_section();
     } else {
       tbl << *i
-          << stringify(si_t(info.size))
+          << stringify(iec_t(info.size))
           << parent
           << ((old_format) ? '1' : '2')
           << ""                         // protect doesn't apply to images
@@ -165,7 +165,7 @@ int do_list(librbd::RBD &rbd, librados::IoCtx& io_ctx, bool lflag,
           f->close_section();
         } else {
           tbl << *i + "@" + s->name
-              << stringify(si_t(s->size))
+              << stringify(iec_t(s->size))
               << parent
               << ((old_format) ? '1' : '2')
               << (is_protected ? "yes" : "")

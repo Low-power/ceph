@@ -943,9 +943,9 @@ public:
     dump_stray(tbl);
 
     *tbl << "" << "" << "TOTAL"
-	 << si_t(pgm->osd_sum.kb << 10)
-	 << si_t(pgm->osd_sum.kb_used << 10)
-	 << si_t(pgm->osd_sum.kb_avail << 10)
+	 << iec_t(pgm->osd_sum.kb << 10)
+	 << iec_t(pgm->osd_sum.kb_used << 10)
+	 << iec_t(pgm->osd_sum.kb_avail << 10)
 	 << lowprecision_t(average_util)
 	 << ""
 	 << TextTable::endrow;
@@ -971,9 +971,9 @@ protected:
     *tbl << qi.id
 	 << weightf_t(qi.weight)
 	 << weightf_t(reweight)
-	 << si_t(kb << 10)
-	 << si_t(kb_used << 10)
-	 << si_t(kb_avail << 10)
+	 << iec_t(kb << 10)
+	 << iec_t(kb_used << 10)
+	 << iec_t(kb_avail << 10)
 	 << lowprecision_t(util)
 	 << lowprecision_t(var)
 	 << num_pgs;
@@ -4198,7 +4198,7 @@ stats_out:
       if (p->quota_max_bytes == 0)
         rs << "N/A";
       else
-        rs << si_t(p->quota_max_bytes) << "B";
+        rs << iec_t(p->quota_max_bytes) << "B";
       rdata.append(rs.str());
     }
     rdata.append("\n");
@@ -4369,7 +4369,7 @@ bool OSDMonitor::update_pools_status()
           (uint64_t)sum.num_bytes >= pool.quota_max_bytes) {
         mon->clog->warn() << "pool '" << pool_name << "' is full"
                          << " (reached quota's max_bytes: "
-                         << si_t(pool.quota_max_bytes) << ")";
+                         << iec_t(pool.quota_max_bytes) << ")";
       } else if (pool.quota_max_objects > 0 &&
 		 (uint64_t)sum.num_objects >= pool.quota_max_objects) {
         mon->clog->warn() << "pool '" << pool_name << "' is full"
@@ -4449,14 +4449,14 @@ void OSDMonitor::get_pools_health(
       } else if (crit_threshold > 0 &&
 		 sum.num_bytes >= pool.quota_max_bytes*crit_threshold) {
         ss << "pool '" << pool_name
-           << "' has " << si_t(sum.num_bytes) << " bytes"
-           << " (max " << si_t(pool.quota_max_bytes) << ")";
+           << "' has " << iec_t(sum.num_bytes) << " bytes"
+           << " (max " << iec_t(pool.quota_max_bytes) << ")";
         status = HEALTH_ERR;
       } else if (warn_threshold > 0 &&
 		 sum.num_bytes >= pool.quota_max_bytes*warn_threshold) {
         ss << "pool '" << pool_name
-           << "' has " << si_t(sum.num_bytes) << " bytes"
-           << " (max " << si_t(pool.quota_max_bytes) << ")";
+           << "' has " << iec_t(sum.num_bytes) << " bytes"
+           << " (max " << iec_t(pool.quota_max_bytes) << ")";
         status = HEALTH_WARN;
       }
       if (status != HEALTH_OK) {

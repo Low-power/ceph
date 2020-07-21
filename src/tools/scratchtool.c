@@ -194,7 +194,7 @@ static int testrados(void)
 	/* stat */
 	struct rados_pool_stat_t st;
 	r = rados_ioctx_pool_stat(io_ctx, &st);
-	printf("rados_ioctx_pool_stat = %d, %lld KB, %lld objects\n", r, (long long)st.num_kb, (long long)st.num_objects);
+	printf("rados_ioctx_pool_stat = %d, %lld KiB, %lld objects\n", r, (long long)st.num_kib, (long long)st.num_objects);
 
 	/* snapshots */
 	r = rados_ioctx_snap_create(io_ctx, "snap1");
@@ -297,7 +297,7 @@ static int testrados(void)
 
 	/* stat */
 	r = rados_ioctx_pool_stat(io_ctx, &st);
-	printf("rados_stat_pool = %d, %lld KB, %lld objects\n", r, (long long)st.num_kb, (long long)st.num_objects);
+	printf("rados_stat_pool = %d, %lld KiB, %lld objects\n", r, (long long)st.num_kib, (long long)st.num_objects);
 
 	ret = 0;
 

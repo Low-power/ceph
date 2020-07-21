@@ -1860,9 +1860,9 @@ void object_stat_sum_t::dump(Formatter *f) const
   f->dump_int("num_objects_dirty", num_objects_dirty);
   f->dump_int("num_whiteouts", num_whiteouts);
   f->dump_int("num_read", num_rd);
-  f->dump_int("num_read_kb", num_rd_kb);
+  f->dump_int("num_read_kib", num_rd_kib);
   f->dump_int("num_write", num_wr);
-  f->dump_int("num_write_kb", num_wr_kb);
+  f->dump_int("num_write_kib", num_wr_kib);
   f->dump_int("num_scrub_errors", num_scrub_errors);
   f->dump_int("num_shallow_scrub_errors", num_shallow_scrub_errors);
   f->dump_int("num_deep_scrub_errors", num_deep_scrub_errors);
@@ -1898,9 +1898,9 @@ void object_stat_sum_t::encode(bufferlist& bl) const
   ::encode(num_objects_degraded, bl);
   ::encode(num_objects_unfound, bl);
   ::encode(num_rd, bl);
-  ::encode(num_rd_kb, bl);
+  ::encode(num_rd_kib, bl);
   ::encode(num_wr, bl);
-  ::encode(num_wr_kb, bl);
+  ::encode(num_wr_kib, bl);
   ::encode(num_scrub_errors, bl);
   ::encode(num_objects_recovered, bl);
   ::encode(num_bytes_recovered, bl);
@@ -1941,8 +1941,8 @@ void object_stat_sum_t::decode(bufferlist::iterator& bl)
   if (!decode_finish) {
     ::decode(num_bytes, bl);
     if (struct_v < 3) {
-      uint64_t num_kb;
-      ::decode(num_kb, bl);
+      uint64_t num_kib;
+      ::decode(num_kib, bl);
     }
     ::decode(num_objects, bl);
     ::decode(num_object_clones, bl);
@@ -1952,9 +1952,9 @@ void object_stat_sum_t::decode(bufferlist::iterator& bl)
     if (struct_v >= 2)
       ::decode(num_objects_unfound, bl);
     ::decode(num_rd, bl);
-    ::decode(num_rd_kb, bl);
+    ::decode(num_rd_kib, bl);
     ::decode(num_wr, bl);
-    ::decode(num_wr_kb, bl);
+    ::decode(num_wr_kib, bl);
     if (struct_v >= 4)
       ::decode(num_scrub_errors, bl);
     else
@@ -2052,8 +2052,8 @@ void object_stat_sum_t::generate_test_instances(list<object_stat_sum_t*>& o)
   a.num_objects_missing = 123;
   a.num_objects_degraded = 7;
   a.num_objects_unfound = 8;
-  a.num_rd = 9; a.num_rd_kb = 10;
-  a.num_wr = 11; a.num_wr_kb = 12;
+  a.num_rd = 9; a.num_rd_kib = 10;
+  a.num_wr = 11; a.num_wr_kib = 12;
   a.num_objects_recovered = 14;
   a.num_bytes_recovered = 15;
   a.num_keys_recovered = 16;
@@ -2089,9 +2089,9 @@ void object_stat_sum_t::add(const object_stat_sum_t& o)
   num_objects_degraded += o.num_objects_degraded;
   num_objects_misplaced += o.num_objects_misplaced;
   num_rd += o.num_rd;
-  num_rd_kb += o.num_rd_kb;
+  num_rd_kib += o.num_rd_kib;
   num_wr += o.num_wr;
-  num_wr_kb += o.num_wr_kb;
+  num_wr_kib += o.num_wr_kib;
   num_objects_unfound += o.num_objects_unfound;
   num_scrub_errors += o.num_scrub_errors;
   num_shallow_scrub_errors += o.num_shallow_scrub_errors;
@@ -2127,9 +2127,9 @@ void object_stat_sum_t::sub(const object_stat_sum_t& o)
   num_objects_degraded -= o.num_objects_degraded;
   num_objects_misplaced -= o.num_objects_misplaced;
   num_rd -= o.num_rd;
-  num_rd_kb -= o.num_rd_kb;
+  num_rd_kib -= o.num_rd_kib;
   num_wr -= o.num_wr;
-  num_wr_kb -= o.num_wr_kb;
+  num_wr_kib -= o.num_wr_kib;
   num_objects_unfound -= o.num_objects_unfound;
   num_scrub_errors -= o.num_scrub_errors;
   num_shallow_scrub_errors -= o.num_shallow_scrub_errors;
@@ -2167,9 +2167,9 @@ bool operator==(const object_stat_sum_t& l, const object_stat_sum_t& r)
     l.num_objects_misplaced == r.num_objects_misplaced &&
     l.num_objects_unfound == r.num_objects_unfound &&
     l.num_rd == r.num_rd &&
-    l.num_rd_kb == r.num_rd_kb &&
+    l.num_rd_kib == r.num_rd_kib &&
     l.num_wr == r.num_wr &&
-    l.num_wr_kb == r.num_wr_kb &&
+    l.num_wr_kib == r.num_wr_kib &&
     l.num_scrub_errors == r.num_scrub_errors &&
     l.num_shallow_scrub_errors == r.num_shallow_scrub_errors &&
     l.num_deep_scrub_errors == r.num_deep_scrub_errors &&
@@ -2393,8 +2393,8 @@ void pg_stat_t::decode(bufferlist::iterator &bl)
   ::decode(last_scrub_stamp, bl);
   if (struct_v <= 4) {
     ::decode(stats.sum.num_bytes, bl);
-    uint64_t num_kb;
-    ::decode(num_kb, bl);
+    uint64_t num_kib;
+    ::decode(num_kib, bl);
     ::decode(stats.sum.num_objects, bl);
     ::decode(stats.sum.num_object_clones, bl);
     ::decode(stats.sum.num_object_copies, bl);
@@ -2404,9 +2404,9 @@ void pg_stat_t::decode(bufferlist::iterator &bl)
     ::decode(ondisk_log_size, bl);
     if (struct_v >= 2) {
       ::decode(stats.sum.num_rd, bl);
-      ::decode(stats.sum.num_rd_kb, bl);
+      ::decode(stats.sum.num_rd_kib, bl);
       ::decode(stats.sum.num_wr, bl);
-      ::decode(stats.sum.num_wr_kb, bl);
+      ::decode(stats.sum.num_wr_kib, bl);
     }
     if (struct_v >= 3) {
       ::decode(up, bl);
@@ -2659,8 +2659,8 @@ void pool_stat_t::decode(bufferlist::iterator &bl)
     }
   } else {
     ::decode(stats.sum.num_bytes, bl);
-    uint64_t num_kb;
-    ::decode(num_kb, bl);
+    uint64_t num_kib;
+    ::decode(num_kib, bl);
     ::decode(stats.sum.num_objects, bl);
     ::decode(stats.sum.num_object_clones, bl);
     ::decode(stats.sum.num_object_copies, bl);
@@ -2670,9 +2670,9 @@ void pool_stat_t::decode(bufferlist::iterator &bl)
     ::decode(ondisk_log_size, bl);
     if (struct_v >= 2) {
       ::decode(stats.sum.num_rd, bl);
-      ::decode(stats.sum.num_rd_kb, bl);
+      ::decode(stats.sum.num_rd_kib, bl);
       ::decode(stats.sum.num_wr, bl);
-      ::decode(stats.sum.num_wr_kb, bl);
+      ::decode(stats.sum.num_wr_kib, bl);
     }
     if (struct_v >= 3) {
       ::decode(stats.sum.num_objects_unfound, bl);
