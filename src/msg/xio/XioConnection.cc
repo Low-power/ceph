@@ -172,7 +172,8 @@ int XioConnection::passive_setup()
     auth.bl,
     authorizer_reply,
     authorizer_valid,
-    session_key);
+    session_key,
+    NULL);
 
   /* notify hook */
   msgr->ms_deliver_handle_accept(this);
