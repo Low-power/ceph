@@ -70,9 +70,9 @@ template<> bool cmd_getval(CephContext *cct, const cmdmap_t& cmdmap,
   return cmd_getval(cct, cmdmap, k, (int64_t&)val);
 }
 
-static const string EXPERIMENTAL_WARNING("Warning! This feature is experimental."
-"It may cause problems up to and including data loss."
-"Consult the documentation at ceph.com, and if unsure, do not proceed."
+static const string EXPERIMENTAL_WARNING("Warning! This feature is experimental.\n"
+"It may cause problems up to and including data loss.\n"
+"Consult the documentation at ceph.com, and if unsure, do not proceed.\n"
 "Add --yes-i-really-mean-it if you are certain.");
 
 static const string MDS_METADATA_PREFIX("mds_metadata");
@@ -803,16 +803,16 @@ protected:
     string interr;
     int64_t n = strict_strtoll(bool_str.c_str(), 10, &interr);
 
-    if (bool_str == "false" || bool_str == "no"
+    if (bool_str == "off" || bool_str == "false" || bool_str == "no"
         || (interr.length() == 0 && n == 0)) {
       *result = false;
       return 0;
-    } else if (bool_str == "true" || bool_str == "yes"
+    } else if (bool_str == "on" || bool_str == "true" || bool_str == "yes"
         || (interr.length() == 0 && n == 1)) {
       *result = true;
       return 0;
     } else {
-      ss << "value must be false|no|0 or true|yes|1";
+      ss << "value must be false|no|0 or true|yes|1\n";
       return -EINVAL;
     }
   }
@@ -1106,7 +1106,7 @@ bool MDSMonitor::preprocess_command(MonOpRequestRef op)
   } else if (prefix == "fs get") {
     string fs_name;
     cmd_getval(g_ceph_context, cmdmap, "fs_name", fs_name);
-    auto fs = fsmap.get_filesystem(fs_name);
+    std::shared_ptr<const Filesystem> fs = fsmap.get_filesystem(fs_name);
     if (fs == nullptr) {
       ss << "filesystem '" << fs_name << "' not found";
       r = -ENOENT;
@@ -1629,7 +1629,7 @@ int MDSMonitor::management_command(
     cmd_getval(g_ceph_context, cmdmap, "sure", sure);
     if (sure != "--yes-i-really-mean-it") {
       ss << "this is a DESTRUCTIVE operation and will make data in your filesystem permanently" \
-            "inaccessible.  Add --yes-i-really-mean-it if you are sure you wish to continue.";
+            " inaccessible.  Add --yes-i-really-mean-it if you are sure you wish to continue.";
       return -EPERM;
     }
 
