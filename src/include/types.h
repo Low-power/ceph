@@ -347,17 +347,17 @@ struct si_t {
 inline ostream& operator<<(ostream& out, const si_t& b)
 {
   uint64_t bump_after = 100;
-  if (b.v > bump_after << 60)
+  if (b.v > bump_after * 1000 * 1000 * 1000 * 1000 * 1000 * 1000)
     return out << (b.v >> 60) << "E";
-  if (b.v > bump_after << 50)
+  if (b.v > bump_after * 1000 * 1000 * 1000 * 1000 * 1000)
     return out << (b.v >> 50) << "P";
-  if (b.v > bump_after << 40)
+  if (b.v > bump_after * 1000 * 1000 * 1000 * 1000)
     return out << (b.v >> 40) << "T";
-  if (b.v > bump_after << 30)
+  if (b.v > bump_after * 1000 * 1000 * 1000)
     return out << (b.v >> 30) << "G";
-  if (b.v > bump_after << 20)
+  if (b.v > bump_after * 1000 * 1000)
     return out << (b.v >> 20) << "M";
-  if (b.v > bump_after << 10)
+  if (b.v > bump_after * 1000)
     return out << (b.v >> 10) << "k";
   return out << b.v;
 }
@@ -393,17 +393,17 @@ struct pretty_si_t {
 inline ostream& operator<<(ostream& out, const pretty_si_t& b)
 {
   uint64_t bump_after = 100;
-  if (b.v > bump_after << 60)
+  if (b.v > bump_after * 1000 * 1000 * 1000 * 1000 * 1000 * 1000)
     return out << (b.v >> 60) << " E";
-  if (b.v > bump_after << 50)
+  if (b.v > bump_after * 1000 * 1000 * 1000 * 1000 * 1000)
     return out << (b.v >> 50) << " P";
-  if (b.v > bump_after << 40)
+  if (b.v > bump_after * 1000 * 1000 * 1000 * 1000)
     return out << (b.v >> 40) << " T";
-  if (b.v > bump_after << 30)
+  if (b.v > bump_after * 1000 * 1000 * 1000)
     return out << (b.v >> 30) << " G";
-  if (b.v > bump_after << 20)
+  if (b.v > bump_after * 1000 * 1000)
     return out << (b.v >> 20) << " M";
-  if (b.v > bump_after << 10)
+  if (b.v > bump_after * 1000)
     return out << (b.v >> 10) << " k";
   return out << b.v << " ";
 }
