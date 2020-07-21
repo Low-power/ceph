@@ -34,6 +34,7 @@ public:
   int mount(Handle *, const char *, int);
   int umount(Handle *, const char *, int);
   bool is_mounted(Handle *, char **);
+  const char *get_last_error_message();
 };
 
 #endif

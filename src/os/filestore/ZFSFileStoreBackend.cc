@@ -86,7 +86,7 @@ int ZFSFileStoreBackend::update_current_zh()
     }
     zfs.close(zh);
   } else {
-    dout(0) << "update_current_zh: zfs_open '" << path << "' got NULL" << dendl;
+    dout(0) << "update_current_zh: zfs_open '" << path << "' failed: " << zfs.get_last_error_message() << dendl;
     return -ENOENT;
   }
 

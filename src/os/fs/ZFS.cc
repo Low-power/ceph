@@ -81,3 +81,7 @@ int ZFS::iter_snapshots_sorted(ZFS::Handle *h, ZFS::iter_func f, void *d)
 {
   return ::zfs_iter_snapshots_sorted((zfs_handle_t*)h, (zfs_iter_f)f, d);
 }
+
+const char *ZFS::get_last_error_message() {
+	return ::libzfs_error_description((libzfs_handle_t*)g_zfs);
+}
